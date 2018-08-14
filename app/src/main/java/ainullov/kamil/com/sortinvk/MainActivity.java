@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     //    private String[] scope = new String[]{VKScope.GROUPS, VKScope.WALL, VKScope.FRIENDS, VKScope.MESSAGES};
     TextView textView;
 
-    String groupName = "jdroidcoder";
+    String GROUP_NAME = "tj";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,8 +43,9 @@ public class MainActivity extends AppCompatActivity {
 
         textView = (TextView) findViewById(R.id.textView);
 
-        itemInAdapterList.add(new ItemInAdapter("https://vk.com/" + groupName + "?w=wall" , 242342, 512));
-        itemInAdapterList.add(new ItemInAdapter("https://vk.com/" + groupName + "?w=wall" , 97323, 673));
+        // Проверка RecyclerView
+        itemInAdapterList.add(new ItemInAdapter("https://vk.com/" + GROUP_NAME + "?w=wall" , 242342, 512));
+        itemInAdapterList.add(new ItemInAdapter("https://vk.com/" + GROUP_NAME + "?w=wall" , 97323, 673));
 
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
@@ -62,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResult(VKAccessToken res) {
 
-                VKRequest vkRequest = new VKApiGroups().getById(VKParameters.from("group_ids", groupName));
+                VKRequest vkRequest = new VKApiGroups().getById(VKParameters.from("group_ids", GROUP_NAME));
                 vkRequest.executeWithListener(new VKRequest.VKRequestListener() {
                     @Override
                     public void onComplete(VKResponse response) {
@@ -81,14 +82,14 @@ public class MainActivity extends AppCompatActivity {
                                         JSONArray jsonArray = (JSONArray) jsonObject.get("items"); // получили items
 //
                                         //!!! Необходимо получить likes, потом count
-                                        JSONObject jsonObjectLikesAndReposts = (JSONObject) jsonObject.get("likes");
-                                        JSONArray jsonArrayLikes = (JSONArray) jsonObject.get("items");
+//                                        JSONObject jsonObjectLikesAndReposts = (JSONObject) jsonObject.get("likes");
+//                                        JSONArray jsonArrayLikes = (JSONArray) jsonObject.get("items");
 
                                         for (int i = 0; i < jsonArray.length(); i++) {// Пробегаемся по всему json'у
                                             JSONObject post = (JSONObject) jsonArray.get(i);
 //                                            System.out.println(post.getString("text")); // текст отдельно
                                             textView.setText(post.getString("text"));
-                                            itemInAdapterList.add(new ItemInAdapter("https://vk.com/" + groupName + "?w=wall" + post.getInt("owner_id") + "_" + post.getInt("id"), 22, 22));
+                                            itemInAdapterList.add(new ItemInAdapter("https://vk.com/" + GROUP_NAME + "?w=wall" + post.getInt("owner_id") + "_" + post.getInt("id"), 22, 22));
                                         }
                                     } catch (JSONException e) {
                                         e.printStackTrace();
