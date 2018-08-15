@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,32 +31,51 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     List<ItemInAdapter> itemInAdapterList = new ArrayList<>();
     Adapter adapter;
     RecyclerView recyclerView;
-    //    private String[] scope = new String[]{VKScope.GROUPS, VKScope.WALL, VKScope.FRIENDS, VKScope.MESSAGES};
-    TextView textView;
+//    private String[] scope = new String[]{VKScope.GROUPS, VKScope.WALL, VKScope.FRIENDS, VKScope.MESSAGES};
+    TextView textViewGroupAdress;
+    TextView textViewPostsCount;
+    EditText editTextGroupAdress;
+    EditText editTextPostsCount;
 
+    Button buttonStart;
     String GROUP_NAME = "tj";
+    int POSTS_COUNT = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        textView = (TextView) findViewById(R.id.textView);
-
-
+        textViewGroupAdress = (TextView) findViewById(R.id.textViewGroupAdress);
+        textViewPostsCount = (TextView) findViewById(R.id.textViewPostsCount);
+        editTextGroupAdress = (EditText) findViewById(R.id.editTextGroupAdress);
+        editTextPostsCount = (EditText) findViewById(R.id.editTextPostsCount);
+        buttonStart = (Button) findViewById(R.id.buttonStart);
+        buttonStart.setOnClickListener(this);
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new Adapter(this, itemInAdapterList);
         recyclerView.setAdapter(adapter);
-
-        VKSdk.login(this);
 //      VKSdk.login(this, scope);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.buttonStart:
+                if (editTextGroupAdress != null)
+                    GROUP_NAME = editTextGroupAdress.getText().toString();
+                if (editTextPostsCount != null)
+                    POSTS_COUNT = Integer.valueOf(editTextPostsCount.getText().toString());
+                VKSdk.login(this);
+                break;
+        }
     }
 
     @Override
@@ -71,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
                         final VKList vkList = (VKList) response.parsedModel;
                         try {
                             VKRequest vkRequest1 = new VKApiWall().get(VKParameters.from(VKApiConst.OWNER_ID, "-" + vkList
-                                    .get(0).fields.getInt("id"), VKApiConst.COUNT, 100));
+                                    .get(0).fields.getInt("id"), VKApiConst.COUNT, POSTS_COUNT));
                             vkRequest1.executeWithListener(new VKRequest.VKRequestListener() {
                                 @Override
                                 public void onComplete(VKResponse response) {
@@ -82,22 +104,20 @@ public class MainActivity extends AppCompatActivity {
 
                                         for (int i = 0; i < jsonArray.length(); i++) {// Пробегаемся по всему json'у
                                             JSONObject post = (JSONObject) jsonArray.get(i);
-
                                             JSONObject likes = (JSONObject) post.getJSONObject("likes");
                                             int likesCount = likes.getInt("count");
                                             JSONObject reposts = (JSONObject) post.getJSONObject("reposts");
                                             int repostsCount = reposts.getInt("count");
 
-//                                            System.out.println(post.getString("text")); // текст отдельно
-                                            textView.setText(post.getString("text"));
                                             itemInAdapterList.add(new ItemInAdapter("https://vk.com/" + GROUP_NAME + "?w=wall" + post.getInt("owner_id") + "_" + post.getInt("id"), likesCount, repostsCount));
-                                            Collections.sort(itemInAdapterList, ItemInAdapter.COMPARE_BY_LIKES);
+
                                         }
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
                                 }
                             });
+                            Collections.sort(itemInAdapterList, ItemInAdapter.COMPARE_BY_LIKES);
                             adapter.notifyDataSetChanged();
 
                         } catch (JSONException e) {

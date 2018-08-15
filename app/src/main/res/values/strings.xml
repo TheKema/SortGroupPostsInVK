@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">SortInVK</string>
+    <string name="vk_com">Введите адресс группы, начинающийся после vk.com/</string>
+    <string name="_100">Количество записей ( максимум: 100 )</string>
     <integer name="com_vk_sdk_AppId">6658119</integer>
 
 </resources>
