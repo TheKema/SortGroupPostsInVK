@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     List<ItemInAdapter> itemInAdapterList = new ArrayList<>();
     Adapter adapter;
     RecyclerView recyclerView;
-//    private String[] scope = new String[]{VKScope.GROUPS, VKScope.WALL, VKScope.FRIENDS, VKScope.MESSAGES};
+    //    private String[] scope = new String[]{VKScope.GROUPS, VKScope.WALL, VKScope.FRIENDS, VKScope.MESSAGES};
     TextView textViewGroupAdress;
     TextView textViewPostsCount;
     EditText editTextGroupAdress;
@@ -97,19 +97,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             vkRequest1.executeWithListener(new VKRequest.VKRequestListener() {
                                 @Override
                                 public void onComplete(VKResponse response) {
-                                    super.onComplete(response); //System.out.println("!!!!!" + response.responseString);
+                                    super.onComplete(response);
                                     try {
                                         JSONObject jsonObject = (JSONObject) response.json.get("response");
-                                        JSONArray jsonArray = (JSONArray) jsonObject.get("items"); // получили items
+                                        JSONArray jsonArray = (JSONArray) jsonObject.get("items"); // Получили items
 
-                                        for (int i = 0; i < jsonArray.length(); i++) {// Пробегаемся по всему json'у
+                                        for (int i = 0; i < jsonArray.length(); i++) { // Пробегаемся по всему json'у
                                             JSONObject post = (JSONObject) jsonArray.get(i);
                                             JSONObject likes = (JSONObject) post.getJSONObject("likes");
                                             int likesCount = likes.getInt("count");
                                             JSONObject reposts = (JSONObject) post.getJSONObject("reposts");
                                             int repostsCount = reposts.getInt("count");
 
-                                            itemInAdapterList.add(new ItemInAdapter("https://vk.com/" + GROUP_NAME + "?w=wall" + post.getInt("owner_id") + "_" + post.getInt("id"), likesCount, repostsCount));
+                                            itemInAdapterList.add(new ItemInAdapter("https://vk.com/" + GROUP_NAME + "?w=wall" +
+                                                    post.getInt("owner_id") + "_" + post.getInt("id"), likesCount, repostsCount));
 
                                         }
                                     } catch (JSONException e) {

@@ -60,7 +60,7 @@
             android:layout_width="match_parent"
             android:layout_height="38dp"
             android:fontFamily="monospace"
-            android:text="Сортировать"
+            android:text="@string/sorting"
             android:background="@drawable/roundedbutton"
             android:textStyle="bold" />
     </LinearLayout>
