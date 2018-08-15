@@ -1,5 +1,7 @@
 package ainullov.kamil.com.sortinvk;
 
+import java.util.Comparator;
+
 public class ItemInAdapter {
     private String links;
     private int likes;
@@ -34,4 +36,16 @@ public class ItemInAdapter {
     public void setReposts(int reposts) {
         this.reposts = reposts;
     }
+
+    @Override
+    public String toString() {
+        return "ItemInAdapter: " + "links= " + links + ", likes= " + likes + ", reposts= " + reposts;
+    }
+
+    public static final Comparator<ItemInAdapter> COMPARE_BY_LIKES = new Comparator<ItemInAdapter>() {
+        @Override
+        public int compare(ItemInAdapter itemInAdapter, ItemInAdapter t1) {
+            return t1.likes - itemInAdapter.likes;
+        }
+    };
 }

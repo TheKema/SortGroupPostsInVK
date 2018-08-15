@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKCallback;
@@ -24,6 +25,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -43,9 +45,6 @@ public class MainActivity extends AppCompatActivity {
 
         textView = (TextView) findViewById(R.id.textView);
 
-        // Проверка RecyclerView
-        itemInAdapterList.add(new ItemInAdapter("https://vk.com/" + GROUP_NAME + "?w=wall" , 242342, 512));
-        itemInAdapterList.add(new ItemInAdapter("https://vk.com/" + GROUP_NAME + "?w=wall" , 97323, 673));
 
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
@@ -80,16 +79,19 @@ public class MainActivity extends AppCompatActivity {
                                     try {
                                         JSONObject jsonObject = (JSONObject) response.json.get("response");
                                         JSONArray jsonArray = (JSONArray) jsonObject.get("items"); // получили items
-//
-                                        //!!! Необходимо получить likes, потом count
-//                                        JSONObject jsonObjectLikesAndReposts = (JSONObject) jsonObject.get("likes");
-//                                        JSONArray jsonArrayLikes = (JSONArray) jsonObject.get("items");
 
                                         for (int i = 0; i < jsonArray.length(); i++) {// Пробегаемся по всему json'у
                                             JSONObject post = (JSONObject) jsonArray.get(i);
+
+                                            JSONObject likes = (JSONObject) post.getJSONObject("likes");
+                                            int likesCount = likes.getInt("count");
+                                            JSONObject reposts = (JSONObject) post.getJSONObject("reposts");
+                                            int repostsCount = reposts.getInt("count");
+
 //                                            System.out.println(post.getString("text")); // текст отдельно
                                             textView.setText(post.getString("text"));
-                                            itemInAdapterList.add(new ItemInAdapter("https://vk.com/" + GROUP_NAME + "?w=wall" + post.getInt("owner_id") + "_" + post.getInt("id"), 22, 22));
+                                            itemInAdapterList.add(new ItemInAdapter("https://vk.com/" + GROUP_NAME + "?w=wall" + post.getInt("owner_id") + "_" + post.getInt("id"), likesCount, repostsCount));
+                                            Collections.sort(itemInAdapterList, ItemInAdapter.COMPARE_BY_LIKES);
                                         }
                                     } catch (JSONException e) {
                                         e.printStackTrace();
@@ -107,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onError(VKError error) {
+                Toast.makeText(MainActivity.this, "Error!", Toast.LENGTH_SHORT).show();
             }
         })) {
             super.onActivityResult(requestCode, resultCode, data);
