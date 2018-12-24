@@ -4,16 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    android:background="@drawable/fon">
+    tools:context=".MainActivity">
 
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
-        android:layout_height="180dp"
-        android:layout_marginEnd="8dp"
+        android:layout_height="190dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,26 +23,25 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="monospace"
-            android:text="@string/vk_com"
+            android:text="Группа: "
             android:textStyle="bold" />
 
-        <EditText
-            android:id="@+id/editTextGroupAdress"
+        <Button
+            android:id="@+id/btnGroupSelection"
             android:layout_width="match_parent"
-            android:layout_height="42dp"
-            android:ems="10"
+            android:layout_height="38dp"
+            android:background="@drawable/roundedbutton"
+            android:textStyle="bold"
             android:fontFamily="monospace"
-            android:inputType="textPersonName"
-            android:text=""
-            android:textStyle="bold" />
+            android:text="Выбрать группу" />
 
         <TextView
             android:id="@+id/textViewPostsCount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
             android:fontFamily="monospace"
-            android:text="@string/_100" />
+            android:text="@string/_100"
+            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/editTextPostsCount"
@@ -59,9 +57,9 @@
             android:id="@+id/buttonStart"
             android:layout_width="match_parent"
             android:layout_height="38dp"
+            android:background="@drawable/roundedbutton"
             android:fontFamily="monospace"
             android:text="@string/sorting"
-            android:background="@drawable/roundedbutton"
             android:textStyle="bold" />
     </LinearLayout>
 

@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import java.util.List;
 
 public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
@@ -22,8 +23,6 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-//        View view = LayoutInflater.from(parent.getContext())
-//                .inflate(R.layout.list_item, parent, false);
         View view = inflater.inflate(R.layout.list_item, parent, false);
         return new ViewHolder(view);
     }
@@ -31,8 +30,9 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.textViewLinks.setText(itemInAdapters.get(position).getLinks().toString());
-        holder.textViewLikes.setText("Likes "+itemInAdapters.get(position).getLikes());
-        holder.textViewReposts.setText("Reposts "+itemInAdapters.get(position).getReposts());
+        holder.textViewLikes.setText("Likes " + itemInAdapters.get(position).getLikes());
+        holder.textViewNum.setText("" + itemInAdapters.get(position).getNum());
+        holder.textViewReposts.setText("Reposts " + itemInAdapters.get(position).getReposts());
     }
 
     @Override
@@ -43,6 +43,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     class ViewHolder extends RecyclerView.ViewHolder {
 
         final TextView textViewLikes;
+        final TextView textViewNum;
         final TextView textViewReposts;
         final TextView textViewLinks;
         final ImageView imageViewLikes;
@@ -50,6 +51,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
         public ViewHolder(View itemView) {
             super(itemView);
+            textViewNum = itemView.findViewById(R.id.tvNum);
             textViewLikes = itemView.findViewById(R.id.textViewLikes);
             textViewReposts = itemView.findViewById(R.id.textViewReposts);
             textViewLinks = itemView.findViewById(R.id.textViewLinks);

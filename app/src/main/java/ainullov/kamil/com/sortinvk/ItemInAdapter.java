@@ -5,12 +5,22 @@ import java.util.Comparator;
 public class ItemInAdapter {
     private String links;
     private int likes;
+    private int num;
     private int reposts;
 
-    public ItemInAdapter(String links, int likes, int reposts) {
+    public ItemInAdapter(String links, int likes, int reposts, int num) {
         this.links = links;
         this.likes = likes;
         this.reposts = reposts;
+        this.num = num;
+    }
+
+    public int getNum() {
+        return num;
+    }
+
+    public void setNum(int num) {
+        this.num = num;
     }
 
     public String getLinks() {
@@ -48,4 +58,5 @@ public class ItemInAdapter {
             return t1.likes - itemInAdapter.likes;
         }
     };
+
 }

@@ -1,6 +1,7 @@
 package ainullov.kamil.com.sortinvk;
 
 import android.content.Intent;
+import android.widget.Toast;
 
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKAccessTokenTracker;
@@ -24,4 +25,6 @@ public class Application extends android.app.Application {
         vkAccessTokenTracker.startTracking();
         VKSdk.initialize(this);
     }
+
+
 }
