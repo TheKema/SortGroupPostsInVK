@@ -76,7 +76,8 @@ public class GroupSelection extends AppCompatActivity {
                         JSONObject post = (JSONObject) jsonArray.get(i);
                         int id = post.getInt("id");
                         String name = post.getString("name");
-                        groupSelectionItemList.add(new GroupSelectionItem(name, id));
+                        String imageLink = post.getString("photo_100");
+                        groupSelectionItemList.add(new GroupSelectionItem(name, id, imageLink));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

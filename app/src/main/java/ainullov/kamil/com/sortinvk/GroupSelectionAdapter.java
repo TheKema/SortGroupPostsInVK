@@ -12,6 +12,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 import static android.app.Activity.RESULT_OK;
 
@@ -38,8 +41,8 @@ public class GroupSelectionAdapter extends RecyclerView.Adapter<GroupSelectionAd
     @Override
     public void onBindViewHolder(@NonNull GroupSelectionAdapter.ViewHolder holder, int position) {
         holder.tvGroupName.setText("" + groupSelectionItemList.get(position).getGroupName());
-//        holder.tvGroupId.setText("" + groupSelectionItemList.get(position).getId());
-//        holder.tvGroupFollowers.setText("" + groupSelectionItemList.get(position).getGroupFollowers());
+//        Glide.with(holder.itemView.getContext()).load(groupSelectionItemList.get(position).getGroupIcon()).into(holder.ivGroupIcon);
+        Picasso.with(holder.itemView.getContext()).load(groupSelectionItemList.get(position).getGroupIcon()).into(holder.ivGroupIcon);
     }
 
     @Override

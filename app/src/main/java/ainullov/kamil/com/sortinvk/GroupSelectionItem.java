@@ -11,6 +11,12 @@ public class GroupSelectionItem {
         this.id = id;
     }
 
+    public GroupSelectionItem(String groupName, int id, String groupIcon) {
+        this.groupName = groupName;
+        this.id = id;
+        this.groupIcon = groupIcon;
+    }
+
     public GroupSelectionItem(String groupName) {
         this.groupName = groupName;
     }
