@@ -63,8 +63,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        VKSdk.initialize(this);
-        VKSdk.login(this, scope);
+        if (!VKSdk.isLoggedIn()) {
+            VKSdk.initialize(this);
+            VKSdk.login(this, scope);
+        }
+
         textViewGroupAdress = (TextView) findViewById(R.id.textViewGroupAdress);
         textViewPostsCount = (TextView) findViewById(R.id.textViewPostsCount);
         editTextPostsCount = (EditText) findViewById(R.id.editTextPostsCount);
@@ -90,7 +93,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.buttonStart:
                 pd = new ProgressDialog(this);
 
-
                 itemInAdapterList.clear();
                 offset = 0;
                 num = 0;
@@ -99,7 +101,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 } else {
                     if (editTextPostsCount != null)
                         POSTS_COUNT = Integer.valueOf(editTextPostsCount.getText().toString()) * 100;
-
 
                     pd.setTitle("Загрузка");
                     pd.setMessage("Примерное время ожидания: " + Math.round((POSTS_COUNT / 100) * 0.5) + " секунд");
@@ -114,10 +115,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 pd.incrementSecondaryProgressBy(100);
 
                                 h.sendEmptyMessageDelayed(0, 300);
-
-
-//                    int allPosts = 0;
-//                    while (allPosts != POSTS_COUNT) {
 
                                 vkRequest = VKApi.wall().get(VKParameters.from(VKApiConst.OWNER_ID, "-" + GROUP_ID, VKApiConst.COUNT, POSTS_COUNT, VKApiConst.OFFSET, offset));
                                 vkRequest.executeSyncWithListener(new VKRequest.VKRequestListener() {
@@ -145,18 +142,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                         }
                                     }
                                 });
-//                        allPosts += 100;
                                 offset += 100;
-
-//                        try {
-//                            synchronized (this) {
-//                                wait(400);
-//                            }
-//                        } catch (InterruptedException e) {
-//                            e.printStackTrace();
-//                        }
-
-//                    }
 
                                 Collections.sort(itemInAdapterList, ItemInAdapter.COMPARE_BY_LIKES);
                                 adapter.notifyDataSetChanged();
@@ -168,16 +154,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 pd.dismiss();
                             }
 
-
                         }
                     };
                     h.sendEmptyMessageDelayed(0, 1000);
-
-
-                    // offset = 100;
-//                    Collections.sort(itemInAdapterList, ItemInAdapter.COMPARE_BY_LIKES);
-//                    adapter.notifyDataSetChanged();
-
                 }
                 break;
         }
