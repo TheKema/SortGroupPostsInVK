@@ -1,7 +1,10 @@
 package ainullov.kamil.com.sortinvk;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -40,6 +43,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     EditText editTextPostsCount;
     Button buttonStart;
     Button btnGroupSelection;
+
+    ProgressDialog pd;
+    Handler h;
 
     final int REQUEST_CODE_SELECT_GROUP = 1;
     String GROUP_NAME = "";
@@ -82,6 +88,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivityForResult(intent, REQUEST_CODE_SELECT_GROUP);
                 break;
             case R.id.buttonStart:
+                pd = new ProgressDialog(this);
+
+
                 itemInAdapterList.clear();
                 offset = 0;
                 num = 0;
@@ -91,49 +100,83 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     if (editTextPostsCount != null)
                         POSTS_COUNT = Integer.valueOf(editTextPostsCount.getText().toString()) * 100;
 
-                    int allPosts = 0;
-                    while (allPosts != POSTS_COUNT) {
 
-                        vkRequest = VKApi.wall().get(VKParameters.from(VKApiConst.OWNER_ID, "-" + GROUP_ID, VKApiConst.COUNT, POSTS_COUNT, VKApiConst.OFFSET, offset));
-                        vkRequest.executeSyncWithListener(new VKRequest.VKRequestListener() {
-                            @Override
-                            public void onComplete(VKResponse response) {
-                                super.onComplete(response);
-                                try {
-                                    JSONObject jsonObject = (JSONObject) response.json.get("response");
-                                    JSONArray jsonArray = (JSONArray) jsonObject.get("items"); // Получили items
+                    pd.setTitle("Загрузка");
+                    pd.setMessage("Примерное время ожидания: " + Math.round((POSTS_COUNT / 100) * 0.5) + " секунд");
+                    pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                    pd.setMax(POSTS_COUNT);
+                    pd.show();
 
-                                    for (int i = 0; i < jsonArray.length(); i++) { // Пробегаемся по всему json'у
-                                        JSONObject post = (JSONObject) jsonArray.get(i);
-                                        JSONObject likes = (JSONObject) post.getJSONObject("likes");
-                                        int likesCount = likes.getInt("count");
-                                        JSONObject reposts = (JSONObject) post.getJSONObject("reposts");
-                                        int repostsCount = reposts.getInt("count");
+                    h = new Handler() {
+                        public void handleMessage(Message msg) {
+                            if (pd.getProgress() < pd.getMax()) {
+                                pd.incrementProgressBy(100);
+                                pd.incrementSecondaryProgressBy(100);
 
-                                        itemInAdapterList.add(new ItemInAdapter("https://vk.com/" + GROUP_ID + "?w=wall" +
-                                                post.getInt("owner_id") + "_" + post.getInt("id"), likesCount, repostsCount, num));
-                                        num++;
+                                h.sendEmptyMessageDelayed(0, 300);
 
+
+//                    int allPosts = 0;
+//                    while (allPosts != POSTS_COUNT) {
+
+                                vkRequest = VKApi.wall().get(VKParameters.from(VKApiConst.OWNER_ID, "-" + GROUP_ID, VKApiConst.COUNT, POSTS_COUNT, VKApiConst.OFFSET, offset));
+                                vkRequest.executeSyncWithListener(new VKRequest.VKRequestListener() {
+                                    @Override
+                                    public void onComplete(VKResponse response) {
+                                        super.onComplete(response);
+                                        try {
+                                            JSONObject jsonObject = (JSONObject) response.json.get("response");
+                                            JSONArray jsonArray = (JSONArray) jsonObject.get("items"); // Получили items
+
+                                            for (int i = 0; i < jsonArray.length(); i++) { // Пробегаемся по всему json'у
+                                                JSONObject post = (JSONObject) jsonArray.get(i);
+                                                JSONObject likes = (JSONObject) post.getJSONObject("likes");
+                                                int likesCount = likes.getInt("count");
+                                                JSONObject reposts = (JSONObject) post.getJSONObject("reposts");
+                                                int repostsCount = reposts.getInt("count");
+
+                                                itemInAdapterList.add(new ItemInAdapter("https://vk.com/" + GROUP_ID + "?w=wall" +
+                                                        post.getInt("owner_id") + "_" + post.getInt("id"), likesCount, repostsCount, num));
+                                                num++;
+
+                                            }
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
                                     }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        });
-                        allPosts += 100;
-                        offset += 100;
+                                });
+//                        allPosts += 100;
+                                offset += 100;
 
-                        try {
-                            synchronized (this) {
-                                wait(400);
+//                        try {
+//                            synchronized (this) {
+//                                wait(400);
+//                            }
+//                        } catch (InterruptedException e) {
+//                            e.printStackTrace();
+//                        }
+
+//                    }
+
+                                Collections.sort(itemInAdapterList, ItemInAdapter.COMPARE_BY_LIKES);
+                                adapter.notifyDataSetChanged();
+
+
+                            } else {
+                                Collections.sort(itemInAdapterList, ItemInAdapter.COMPARE_BY_LIKES);
+                                adapter.notifyDataSetChanged();
+                                pd.dismiss();
                             }
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
+
+
                         }
-                    }
-                   // offset = 100;
-                    Collections.sort(itemInAdapterList, ItemInAdapter.COMPARE_BY_LIKES);
-                    adapter.notifyDataSetChanged();
+                    };
+                    h.sendEmptyMessageDelayed(0, 1000);
+
+
+                    // offset = 100;
+//                    Collections.sort(itemInAdapterList, ItemInAdapter.COMPARE_BY_LIKES);
+//                    adapter.notifyDataSetChanged();
 
                 }
                 break;
