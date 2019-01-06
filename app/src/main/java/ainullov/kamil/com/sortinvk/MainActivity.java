@@ -1,6 +1,7 @@
 package ainullov.kamil.com.sortinvk;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,22 +19,20 @@ import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKCallback;
 import com.vk.sdk.VKScope;
 import com.vk.sdk.VKSdk;
-import com.vk.sdk.api.VKApi;
-import com.vk.sdk.api.VKApiConst;
 import com.vk.sdk.api.VKError;
-import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
-import com.vk.sdk.api.VKResponse;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+import ainullov.kamil.com.sortinvk.mvp.MainContract;
+import ainullov.kamil.com.sortinvk.mvp.MainPresenter;
+
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, MainContract.View {
+    private MainContract.Presenter mPresenter;
+    Context context;
+
     List<ItemInAdapter> itemInAdapterList;
     Adapter adapter;
     RecyclerView recyclerView;
@@ -63,6 +62,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        context = this;
+
         if (!VKSdk.isLoggedIn()) {
             VKSdk.initialize(this);
             VKSdk.login(this, scope);
@@ -91,9 +92,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivityForResult(intent, REQUEST_CODE_SELECT_GROUP);
                 break;
             case R.id.buttonStart:
-                pd = new ProgressDialog(this);
 
                 itemInAdapterList.clear();
+
                 offset = 0;
                 num = 0;
                 if (GROUP_ID == 0) {
@@ -102,58 +103,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     if (editTextPostsCount != null)
                         POSTS_COUNT = Integer.valueOf(editTextPostsCount.getText().toString()) * 100;
 
+                    pd = new ProgressDialog(this);
                     pd.setTitle("Загрузка");
-                    pd.setMessage("Примерное время ожидания: " + Math.round((POSTS_COUNT / 100) * 0.5) + " секунд");
+//                    pd.setMessage("Примерное время ожидания: " + Math.round((POSTS_COUNT / 100) * 0.5) + " секунд");
                     pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
                     pd.setMax(POSTS_COUNT);
                     pd.show();
+
+                    mPresenter = new MainPresenter(this);
 
                     h = new Handler() {
                         public void handleMessage(Message msg) {
                             if (pd.getProgress() < pd.getMax()) {
                                 pd.incrementProgressBy(100);
                                 pd.incrementSecondaryProgressBy(100);
-
                                 h.sendEmptyMessageDelayed(0, 300);
 
-                                vkRequest = VKApi.wall().get(VKParameters.from(VKApiConst.OWNER_ID, "-" + GROUP_ID, VKApiConst.COUNT, POSTS_COUNT, VKApiConst.OFFSET, offset));
-                                vkRequest.executeSyncWithListener(new VKRequest.VKRequestListener() {
-                                    @Override
-                                    public void onComplete(VKResponse response) {
-                                        super.onComplete(response);
-                                        try {
-                                            JSONObject jsonObject = (JSONObject) response.json.get("response");
-                                            JSONArray jsonArray = (JSONArray) jsonObject.get("items"); // Получили items
-
-                                            for (int i = 0; i < jsonArray.length(); i++) { // Пробегаемся по всему json'у
-                                                JSONObject post = (JSONObject) jsonArray.get(i);
-                                                JSONObject likes = (JSONObject) post.getJSONObject("likes");
-                                                int likesCount = likes.getInt("count");
-                                                JSONObject reposts = (JSONObject) post.getJSONObject("reposts");
-                                                int repostsCount = reposts.getInt("count");
-
-                                                itemInAdapterList.add(new ItemInAdapter("https://vk.com/" + GROUP_ID + "?w=wall" +
-                                                        post.getInt("owner_id") + "_" + post.getInt("id"), likesCount, repostsCount, num));
-                                                num++;
-
-                                            }
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
-                                });
+                                mPresenter.onSortPostsButtonWasClicked(context, GROUP_ID, POSTS_COUNT, offset, itemInAdapterList, num);
                                 offset += 100;
+                                num += 100;
 
                                 Collections.sort(itemInAdapterList, ItemInAdapter.COMPARE_BY_LIKES);
                                 adapter.notifyDataSetChanged();
-
-
                             } else {
                                 Collections.sort(itemInAdapterList, ItemInAdapter.COMPARE_BY_LIKES);
                                 adapter.notifyDataSetChanged();
                                 pd.dismiss();
                             }
-
                         }
                     };
                     h.sendEmptyMessageDelayed(0, 1000);
@@ -191,4 +167,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+
+    @Override
+    public void showData(List<?> list) {
+        itemInAdapterList = (List<ItemInAdapter>) list;
+        adapter = new Adapter(this, itemInAdapterList);
+        recyclerView.setAdapter(adapter);
+
+        Collections.sort(itemInAdapterList, ItemInAdapter.COMPARE_BY_LIKES);
+        adapter.notifyDataSetChanged();
+
+    }
 }
