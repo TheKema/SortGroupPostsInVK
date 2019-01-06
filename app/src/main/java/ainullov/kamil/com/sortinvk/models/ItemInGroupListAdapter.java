@@ -1,14 +1,14 @@
-package ainullov.kamil.com.sortinvk;
+package ainullov.kamil.com.sortinvk.models;
 
 import java.util.Comparator;
 
-public class ItemInAdapter {
+public class ItemInGroupListAdapter {
     private String links;
     private int likes;
     private int num;
     private int reposts;
 
-    public ItemInAdapter(String links, int likes, int reposts, int num) {
+    public ItemInGroupListAdapter(String links, int likes, int reposts, int num) {
         this.links = links;
         this.likes = likes;
         this.reposts = reposts;
@@ -49,13 +49,13 @@ public class ItemInAdapter {
 
     @Override
     public String toString() {
-        return "ItemInAdapter: " + "links= " + links + ", likes= " + likes + ", reposts= " + reposts;
+        return "ItemInGroupListAdapter: " + "links= " + links + ", likes= " + likes + ", reposts= " + reposts;
     }
 
-    public static final Comparator<ItemInAdapter> COMPARE_BY_LIKES = new Comparator<ItemInAdapter>() {
+    public static final Comparator<ItemInGroupListAdapter> COMPARE_BY_LIKES = new Comparator<ItemInGroupListAdapter>() {
         @Override
-        public int compare(ItemInAdapter itemInAdapter, ItemInAdapter t1) {
-            return t1.likes - itemInAdapter.likes;
+        public int compare(ItemInGroupListAdapter itemInGroupListAdapter, ItemInGroupListAdapter t1) {
+            return t1.likes - itemInGroupListAdapter.likes;
         }
     };
 

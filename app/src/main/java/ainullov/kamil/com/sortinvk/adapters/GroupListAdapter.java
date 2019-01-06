@@ -1,4 +1,4 @@
-package ainullov.kamil.com.sortinvk;
+package ainullov.kamil.com.sortinvk.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -11,12 +11,15 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
-    private List<ItemInAdapter> itemInAdapters;
+import ainullov.kamil.com.sortinvk.models.ItemInGroupListAdapter;
+import ainullov.kamil.com.sortinvk.R;
+
+public class GroupListAdapter extends RecyclerView.Adapter<GroupListAdapter.ViewHolder> {
+    private List<ItemInGroupListAdapter> itemInGroupListAdapters;
     private LayoutInflater inflater;
 
-    Adapter(Context context, List<ItemInAdapter> itemInAdapters) {
-        this.itemInAdapters = itemInAdapters;
+    public GroupListAdapter(Context context, List<ItemInGroupListAdapter> itemInGroupListAdapters) {
+        this.itemInGroupListAdapters = itemInGroupListAdapters;
         this.inflater = LayoutInflater.from(context);
     }
 
@@ -29,15 +32,15 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.textViewLinks.setText(itemInAdapters.get(position).getLinks().toString());
-        holder.textViewLikes.setText("Likes " + itemInAdapters.get(position).getLikes());
-        holder.textViewNum.setText("" + itemInAdapters.get(position).getNum());
-        holder.textViewReposts.setText("Reposts " + itemInAdapters.get(position).getReposts());
+        holder.textViewLinks.setText(itemInGroupListAdapters.get(position).getLinks().toString());
+        holder.textViewLikes.setText("Likes " + itemInGroupListAdapters.get(position).getLikes());
+        holder.textViewNum.setText("" + itemInGroupListAdapters.get(position).getNum());
+        holder.textViewReposts.setText("Reposts " + itemInGroupListAdapters.get(position).getReposts());
     }
 
     @Override
     public int getItemCount() {
-        return itemInAdapters.size();
+        return itemInGroupListAdapters.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

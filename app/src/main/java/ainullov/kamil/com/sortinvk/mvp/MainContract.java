@@ -4,14 +4,14 @@ import android.content.Context;
 
 import java.util.List;
 
-import ainullov.kamil.com.sortinvk.GroupSelectionItem;
-import ainullov.kamil.com.sortinvk.ItemInAdapter;
+import ainullov.kamil.com.sortinvk.models.GroupSelectionItem;
+import ainullov.kamil.com.sortinvk.models.ItemInGroupListAdapter;
 
 public interface MainContract {
     interface Model {
         List<GroupSelectionItem> makeRequestGroupList();
 
-        List<ItemInAdapter> makeRequestSortPosts(Context context, int GROUP_ID, int POSTS_COUNT, int offset, List<ItemInAdapter> itemInAdapterList, int num);
+        List<ItemInGroupListAdapter> makeRequestSortPosts(Context context, int GROUP_ID, int POSTS_COUNT, int offset, List<ItemInGroupListAdapter> itemInGroupListAdapterList, int num);
     }
 
     interface View {
@@ -22,7 +22,7 @@ public interface MainContract {
     interface Presenter {
         void onGroupListButtonWasClicked();
 
-        void onSortPostsButtonWasClicked(Context context, int GROUP_ID, int POSTS_COUNT, int offset, List<ItemInAdapter> itemInAdapterList, int num);
+        void onSortPostsButtonWasClicked(Context context, int GROUP_ID, int POSTS_COUNT, int offset, List<ItemInGroupListAdapter> itemInGroupListAdapterList, int num);
 
         void onDestroy();
     }

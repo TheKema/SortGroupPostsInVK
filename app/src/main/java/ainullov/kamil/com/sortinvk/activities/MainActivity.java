@@ -1,4 +1,4 @@
-package ainullov.kamil.com.sortinvk;
+package ainullov.kamil.com.sortinvk.activities;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -20,12 +20,14 @@ import com.vk.sdk.VKCallback;
 import com.vk.sdk.VKScope;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKError;
-import com.vk.sdk.api.VKRequest;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import ainullov.kamil.com.sortinvk.R;
+import ainullov.kamil.com.sortinvk.adapters.GroupListAdapter;
+import ainullov.kamil.com.sortinvk.models.ItemInGroupListAdapter;
 import ainullov.kamil.com.sortinvk.mvp.MainContract;
 import ainullov.kamil.com.sortinvk.mvp.MainPresenter;
 
@@ -33,8 +35,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private MainContract.Presenter mPresenter;
     Context context;
 
-    List<ItemInAdapter> itemInAdapterList;
-    Adapter adapter;
+    List<ItemInGroupListAdapter> itemInGroupListAdapterList;
+    GroupListAdapter groupListAdapter;
     RecyclerView recyclerView;
 
     TextView textViewGroupAdress;
@@ -55,7 +57,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     static int num = 1;
 
     private String[] scope = new String[]{VKScope.GROUPS, VKScope.WALL};
-    VKRequest vkRequest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,9 +80,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        itemInAdapterList = new ArrayList<>();
-        adapter = new Adapter(this, itemInAdapterList);
-        recyclerView.setAdapter(adapter);
+        itemInGroupListAdapterList = new ArrayList<>();
+        groupListAdapter = new GroupListAdapter(this, itemInGroupListAdapterList);
+        recyclerView.setAdapter(groupListAdapter);
     }
 
     @Override
@@ -93,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.buttonStart:
 
-                itemInAdapterList.clear();
+                itemInGroupListAdapterList.clear();
 
                 offset = 0;
                 num = 0;
@@ -119,15 +120,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 pd.incrementSecondaryProgressBy(100);
                                 h.sendEmptyMessageDelayed(0, 300);
 
-                                mPresenter.onSortPostsButtonWasClicked(context, GROUP_ID, POSTS_COUNT, offset, itemInAdapterList, num);
+                                mPresenter.onSortPostsButtonWasClicked(context, GROUP_ID, POSTS_COUNT, offset, itemInGroupListAdapterList, num);
                                 offset += 100;
                                 num += 100;
 
-                                Collections.sort(itemInAdapterList, ItemInAdapter.COMPARE_BY_LIKES);
-                                adapter.notifyDataSetChanged();
+                                Collections.sort(itemInGroupListAdapterList, ItemInGroupListAdapter.COMPARE_BY_LIKES);
+                                groupListAdapter.notifyDataSetChanged();
                             } else {
-                                Collections.sort(itemInAdapterList, ItemInAdapter.COMPARE_BY_LIKES);
-                                adapter.notifyDataSetChanged();
+                                Collections.sort(itemInGroupListAdapterList, ItemInGroupListAdapter.COMPARE_BY_LIKES);
+                                groupListAdapter.notifyDataSetChanged();
                                 pd.dismiss();
                             }
                         }
@@ -170,12 +171,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void showData(List<?> list) {
-        itemInAdapterList = (List<ItemInAdapter>) list;
-        adapter = new Adapter(this, itemInAdapterList);
-        recyclerView.setAdapter(adapter);
+        itemInGroupListAdapterList = (List<ItemInGroupListAdapter>) list;
+        groupListAdapter = new GroupListAdapter(this, itemInGroupListAdapterList);
+        recyclerView.setAdapter(groupListAdapter);
 
-        Collections.sort(itemInAdapterList, ItemInAdapter.COMPARE_BY_LIKES);
-        adapter.notifyDataSetChanged();
+        Collections.sort(itemInGroupListAdapterList, ItemInGroupListAdapter.COMPARE_BY_LIKES);
+        groupListAdapter.notifyDataSetChanged();
 
     }
 }

@@ -1,4 +1,4 @@
-package ainullov.kamil.com.sortinvk;
+package ainullov.kamil.com.sortinvk.adapters;
 
 import android.app.Activity;
 import android.content.Context;
@@ -12,10 +12,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
+
+import ainullov.kamil.com.sortinvk.models.GroupSelectionItem;
+import ainullov.kamil.com.sortinvk.R;
+
 import static android.app.Activity.RESULT_OK;
 
 public class GroupSelectionAdapter extends RecyclerView.Adapter<GroupSelectionAdapter.ViewHolder> {
@@ -23,7 +26,7 @@ public class GroupSelectionAdapter extends RecyclerView.Adapter<GroupSelectionAd
     private LayoutInflater inflater;
     private Context context;
 
-    GroupSelectionAdapter(Context context, List<GroupSelectionItem> groupSelectionItemList) {
+    public GroupSelectionAdapter(Context context, List<GroupSelectionItem> groupSelectionItemList) {
         this.groupSelectionItemList = groupSelectionItemList;
         this.inflater = LayoutInflater.from(context);
         this.context = context;

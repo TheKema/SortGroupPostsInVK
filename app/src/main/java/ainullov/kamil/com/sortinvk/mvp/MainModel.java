@@ -15,13 +15,13 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import ainullov.kamil.com.sortinvk.GroupSelectionItem;
-import ainullov.kamil.com.sortinvk.ItemInAdapter;
+import ainullov.kamil.com.sortinvk.models.GroupSelectionItem;
+import ainullov.kamil.com.sortinvk.models.ItemInGroupListAdapter;
 
 public class MainModel implements MainContract.Model {
     List<GroupSelectionItem> groupSelectionItemList;
     VKRequest vkRequest;
-    List<ItemInAdapter> _itemInAdapterList;
+    List<ItemInGroupListAdapter> _itemInGroupListAdapterList;
     int _GROUP_ID;
     int _POSTS_COUNT;
     int _offset;
@@ -59,9 +59,9 @@ public class MainModel implements MainContract.Model {
 
 
     @Override
-    public List<ItemInAdapter> makeRequestSortPosts(final Context context, int GROUP_ID, int POSTS_COUNT, int offset, List<ItemInAdapter> itemInAdapterList, int num) {
+    public List<ItemInGroupListAdapter> makeRequestSortPosts(final Context context, int GROUP_ID, int POSTS_COUNT, int offset, List<ItemInGroupListAdapter> itemInGroupListAdapterList, int num) {
         _num = num;
-        _itemInAdapterList = itemInAdapterList;
+        _itemInGroupListAdapterList = itemInGroupListAdapterList;
         _GROUP_ID = GROUP_ID;
         _POSTS_COUNT = POSTS_COUNT;
         _offset = offset;
@@ -82,7 +82,7 @@ public class MainModel implements MainContract.Model {
                         JSONObject reposts = (JSONObject) post.getJSONObject("reposts");
                         int repostsCount = reposts.getInt("count");
 
-                        _itemInAdapterList.add(new ItemInAdapter("https://vk.com/" + _GROUP_ID + "?w=wall" +
+                        _itemInGroupListAdapterList.add(new ItemInGroupListAdapter("https://vk.com/" + _GROUP_ID + "?w=wall" +
                                 post.getInt("owner_id") + "_" + post.getInt("id"), likesCount, repostsCount, _num));
                         _num++;
 
@@ -93,7 +93,7 @@ public class MainModel implements MainContract.Model {
             }
         });
 
-        return _itemInAdapterList;
+        return _itemInGroupListAdapterList;
     }
 
 }

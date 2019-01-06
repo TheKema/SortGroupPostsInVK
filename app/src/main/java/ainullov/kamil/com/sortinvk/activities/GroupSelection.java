@@ -1,15 +1,16 @@
-package ainullov.kamil.com.sortinvk;
+package ainullov.kamil.com.sortinvk.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-import com.vk.sdk.api.VKRequest;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import ainullov.kamil.com.sortinvk.R;
+import ainullov.kamil.com.sortinvk.adapters.GroupSelectionAdapter;
+import ainullov.kamil.com.sortinvk.models.GroupSelectionItem;
 import ainullov.kamil.com.sortinvk.mvp.MainContract;
 import ainullov.kamil.com.sortinvk.mvp.MainPresenter;
 

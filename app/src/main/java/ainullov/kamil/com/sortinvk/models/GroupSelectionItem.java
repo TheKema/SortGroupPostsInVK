@@ -1,4 +1,4 @@
-package ainullov.kamil.com.sortinvk;
+package ainullov.kamil.com.sortinvk.models;
 
 public class GroupSelectionItem {
     private String groupIcon;

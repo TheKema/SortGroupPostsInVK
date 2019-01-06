@@ -5,8 +5,8 @@ import android.content.Context;
 import java.util.ArrayList;
 import java.util.List;
 
-import ainullov.kamil.com.sortinvk.GroupSelectionItem;
-import ainullov.kamil.com.sortinvk.ItemInAdapter;
+import ainullov.kamil.com.sortinvk.models.GroupSelectionItem;
+import ainullov.kamil.com.sortinvk.models.ItemInGroupListAdapter;
 
 public class MainPresenter implements MainContract.Presenter {
     private MainContract.View mView;
@@ -25,9 +25,9 @@ public class MainPresenter implements MainContract.Presenter {
     }
 
     @Override
-    public void onSortPostsButtonWasClicked(Context context, int GROUP_ID, int POSTS_COUNT, int offset, List<ItemInAdapter> itemInAdapterList, int num) {
-        itemInAdapterList = mRepository.makeRequestSortPosts(context, GROUP_ID, POSTS_COUNT, offset, itemInAdapterList, num);
-        mView.showData(itemInAdapterList);
+    public void onSortPostsButtonWasClicked(Context context, int GROUP_ID, int POSTS_COUNT, int offset, List<ItemInGroupListAdapter> itemInGroupListAdapterList, int num) {
+        itemInGroupListAdapterList = mRepository.makeRequestSortPosts(context, GROUP_ID, POSTS_COUNT, offset, itemInGroupListAdapterList, num);
+        mView.showData(itemInGroupListAdapterList);
     }
 
     @Override
