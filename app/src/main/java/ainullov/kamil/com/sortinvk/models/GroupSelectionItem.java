@@ -6,11 +6,6 @@ public class GroupSelectionItem {
     private String groupFollowers;
     private int id;
 
-    public GroupSelectionItem(String groupName, int id) {
-        this.groupName = groupName;
-        this.id = id;
-    }
-
     public GroupSelectionItem(String groupName, int id, String groupIcon) {
         this.groupName = groupName;
         this.id = id;

@@ -25,8 +25,8 @@ public class MainPresenter implements MainContract.Presenter {
     }
 
     @Override
-    public void onSortPostsButtonWasClicked(Context context, int GROUP_ID, int POSTS_COUNT, int offset, List<ItemInGroupListAdapter> itemInGroupListAdapterList, int num) {
-        itemInGroupListAdapterList = mRepository.makeRequestSortPosts(context, GROUP_ID, POSTS_COUNT, offset, itemInGroupListAdapterList, num);
+    public void onSortPostsButtonWasClicked(int GROUP_ID, int POSTS_COUNT, int offset, List<ItemInGroupListAdapter> itemInGroupListAdapterList, int num) {
+        itemInGroupListAdapterList = mRepository.makeRequestSortPosts(GROUP_ID, POSTS_COUNT, offset, itemInGroupListAdapterList, num);
         mView.showData(itemInGroupListAdapterList);
     }
 

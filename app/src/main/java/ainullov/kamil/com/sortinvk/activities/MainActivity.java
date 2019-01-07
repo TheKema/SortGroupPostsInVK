@@ -1,7 +1,6 @@
 package ainullov.kamil.com.sortinvk.activities;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -33,7 +32,6 @@ import ainullov.kamil.com.sortinvk.mvp.MainPresenter;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, MainContract.View {
     private MainContract.Presenter mPresenter;
-    Context context;
 
     List<ItemInGroupListAdapter> itemInGroupListAdapterList;
     GroupListAdapter groupListAdapter;
@@ -63,7 +61,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        context = this;
 
         if (!VKSdk.isLoggedIn()) {
             VKSdk.initialize(this);
@@ -121,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                     pd.incrementSecondaryProgressBy(100);
                                     h.sendEmptyMessageDelayed(0, 300);
 
-                                    mPresenter.onSortPostsButtonWasClicked(context, GROUP_ID, POSTS_COUNT, offset, itemInGroupListAdapterList, num);
+                                    mPresenter.onSortPostsButtonWasClicked(GROUP_ID, POSTS_COUNT, offset, itemInGroupListAdapterList, num);
                                     offset += 100;
                                     num += 100;
 

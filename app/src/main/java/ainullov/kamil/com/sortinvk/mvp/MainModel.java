@@ -19,13 +19,13 @@ import ainullov.kamil.com.sortinvk.models.GroupSelectionItem;
 import ainullov.kamil.com.sortinvk.models.ItemInGroupListAdapter;
 
 public class MainModel implements MainContract.Model {
-    List<GroupSelectionItem> groupSelectionItemList;
-    VKRequest vkRequest;
-    List<ItemInGroupListAdapter> _itemInGroupListAdapterList;
-    int _GROUP_ID;
-    int _POSTS_COUNT;
-    int _offset;
-    int _num = 1;
+    private List<GroupSelectionItem> groupSelectionItemList;
+    private VKRequest vkRequest;
+    private List<ItemInGroupListAdapter> _itemInGroupListAdapterList;
+    private int _GROUP_ID;
+    private int _POSTS_COUNT;
+    private int _offset;
+    private int _num = 1;
 
     @Override
     public List<GroupSelectionItem> makeRequestGroupList() {
@@ -36,7 +36,6 @@ public class MainModel implements MainContract.Model {
             @Override
             public void onComplete(VKResponse response) {
                 super.onComplete(response);
-//                System.out.println(response.responseString);
                 try {
                     JSONObject jsonObject = (JSONObject) response.json.get("response");
                     JSONArray jsonArray = (JSONArray) jsonObject.get("items");
@@ -59,7 +58,7 @@ public class MainModel implements MainContract.Model {
 
 
     @Override
-    public List<ItemInGroupListAdapter> makeRequestSortPosts(final Context context, int GROUP_ID, int POSTS_COUNT, int offset, List<ItemInGroupListAdapter> itemInGroupListAdapterList, int num) {
+    public List<ItemInGroupListAdapter> makeRequestSortPosts(int GROUP_ID, int POSTS_COUNT, int offset, List<ItemInGroupListAdapter> itemInGroupListAdapterList, int num) {
         _num = num;
         _itemInGroupListAdapterList = itemInGroupListAdapterList;
         _GROUP_ID = GROUP_ID;

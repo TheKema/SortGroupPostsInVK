@@ -31,7 +31,6 @@ public class GroupSelection extends AppCompatActivity implements MainContract.Vi
         mPresenter.onGroupListButtonWasClicked();
     }
 
-
     @Override
     public void showData(List<?> list) {
         recyclerView = (RecyclerView) findViewById(R.id.recyclerViewGroupSelection);
