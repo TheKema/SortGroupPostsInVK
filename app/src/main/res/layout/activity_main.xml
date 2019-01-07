@@ -49,7 +49,7 @@
             android:layout_height="42dp"
             android:ems="10"
             android:fontFamily="monospace"
-            android:inputType="textPersonName"
+            android:inputType="number"
             android:text=""
             android:textStyle="bold" />
 

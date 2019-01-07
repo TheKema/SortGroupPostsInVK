@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         textViewGroupAdress = (TextView) findViewById(R.id.textViewGroupAdress);
         textViewPostsCount = (TextView) findViewById(R.id.textViewPostsCount);
         editTextPostsCount = (EditText) findViewById(R.id.editTextPostsCount);
+
         buttonStart = (Button) findViewById(R.id.buttonStart);
         buttonStart.setOnClickListener(this);
         btnGroupSelection = (Button) findViewById(R.id.btnGroupSelection);
@@ -101,39 +102,42 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (GROUP_ID == 0) {
                     Toast.makeText(this, "Выберите группу ", Toast.LENGTH_SHORT).show();
                 } else {
-                    if (editTextPostsCount != null)
+                    if (editTextPostsCount.getText().length() != 0) {
                         POSTS_COUNT = Integer.valueOf(editTextPostsCount.getText().toString()) * 100;
 
-                    pd = new ProgressDialog(this);
-                    pd.setTitle("Загрузка");
+                        pd = new ProgressDialog(this);
+                        pd.setTitle("Загрузка");
 //                    pd.setMessage("Примерное время ожидания: " + Math.round((POSTS_COUNT / 100) * 0.5) + " секунд");
-                    pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                    pd.setMax(POSTS_COUNT);
-                    pd.show();
+                        pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                        pd.setMax(POSTS_COUNT);
+                        pd.show();
 
-                    mPresenter = new MainPresenter(this);
+                        mPresenter = new MainPresenter(this);
 
-                    h = new Handler() {
-                        public void handleMessage(Message msg) {
-                            if (pd.getProgress() < pd.getMax()) {
-                                pd.incrementProgressBy(100);
-                                pd.incrementSecondaryProgressBy(100);
-                                h.sendEmptyMessageDelayed(0, 300);
+                        h = new Handler() {
+                            public void handleMessage(Message msg) {
+                                if (pd.getProgress() < pd.getMax()) {
+                                    pd.incrementProgressBy(100);
+                                    pd.incrementSecondaryProgressBy(100);
+                                    h.sendEmptyMessageDelayed(0, 300);
 
-                                mPresenter.onSortPostsButtonWasClicked(context, GROUP_ID, POSTS_COUNT, offset, itemInGroupListAdapterList, num);
-                                offset += 100;
-                                num += 100;
+                                    mPresenter.onSortPostsButtonWasClicked(context, GROUP_ID, POSTS_COUNT, offset, itemInGroupListAdapterList, num);
+                                    offset += 100;
+                                    num += 100;
 
-                                Collections.sort(itemInGroupListAdapterList, ItemInGroupListAdapter.COMPARE_BY_LIKES);
-                                groupListAdapter.notifyDataSetChanged();
-                            } else {
-                                Collections.sort(itemInGroupListAdapterList, ItemInGroupListAdapter.COMPARE_BY_LIKES);
-                                groupListAdapter.notifyDataSetChanged();
-                                pd.dismiss();
+                                    Collections.sort(itemInGroupListAdapterList, ItemInGroupListAdapter.COMPARE_BY_LIKES);
+                                    groupListAdapter.notifyDataSetChanged();
+                                } else {
+                                    Collections.sort(itemInGroupListAdapterList, ItemInGroupListAdapter.COMPARE_BY_LIKES);
+                                    groupListAdapter.notifyDataSetChanged();
+                                    pd.dismiss();
+                                }
                             }
-                        }
-                    };
-                    h.sendEmptyMessageDelayed(0, 1000);
+                        };
+                        h.sendEmptyMessageDelayed(0, 1000);
+                    } else {
+                        Toast.makeText(this, "Введите количество постов  ", Toast.LENGTH_SHORT).show();
+                    }
                 }
                 break;
         }
@@ -148,7 +152,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     GROUP_NAME = data.getStringExtra("GROUP_NAME");
                     GROUP_ID = data.getIntExtra("GROUP_ID", 0);
                     break;
-
             }
         }
         textViewGroupAdress.setText("Группа: " + GROUP_NAME);
