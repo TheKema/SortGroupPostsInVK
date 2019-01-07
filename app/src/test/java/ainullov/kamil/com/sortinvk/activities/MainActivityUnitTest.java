@@ -4,20 +4,13 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import ainullov.kamil.com.sortinvk.models.GroupSelectionItem;
 import ainullov.kamil.com.sortinvk.models.ItemInGroupListAdapter;
-import ainullov.kamil.com.sortinvk.mvp.MainModel;
-import ainullov.kamil.com.sortinvk.mvp.MainPresenter;
-
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class MainActivityUnitTest {
