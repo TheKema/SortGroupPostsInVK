@@ -26,7 +26,7 @@ import static org.hamcrest.core.StringStartsWith.startsWith;
 
 
 @RunWith(AndroidJUnit4.class)
-public class MainActivityTest {
+public class MainActivityUITest {
 
     @Rule
     public ActivityTestRule<MainActivity> activityTestRule =
