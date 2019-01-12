@@ -3,8 +3,6 @@ package ainullov.kamil.com.sortinvk.activities;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,7 +10,6 @@ import java.util.List;
 
 import ainullov.kamil.com.sortinvk.models.ItemInGroupListAdapter;
 
-@RunWith(MockitoJUnitRunner.class)
 public class MainActivityUnitTest {
     List<ItemInGroupListAdapter> itemInGroupListAdapterList;
 
@@ -30,7 +27,6 @@ public class MainActivityUnitTest {
     public void checkCollectionSort() {
         Collections.sort(itemInGroupListAdapterList, ItemInGroupListAdapter.COMPARE_BY_LIKES);
         Assert.assertEquals(77, itemInGroupListAdapterList.get(0).getLikes());
-
     }
 
 }
